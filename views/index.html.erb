@@ -23,7 +23,7 @@
           <div class="col-md-6">
             <h3>Attempts:</h4>
             <ul class="list-group">
-              <% @attempts.each do |attempt| %>
+              <% @attempts.reverse.each do |attempt| %>
                 <li class="list-group-item">
                   <span class="badge"><%= attempt[1] %></span><%= attempt[0] %>
                 </li>

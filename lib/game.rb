@@ -2,7 +2,7 @@ require 'erb'
 require 'json'
 require 'yaml'
 require 'pry-byebug'
-require_relative '../controller/breaker'
+require_relative '../controllers/breaker_controller'
 
 class Game
   def self.call(env)
@@ -11,6 +11,7 @@ class Game
 
   def initialize(env)
     @request = Rack::Request.new(env)
+    @request.session["init"] = true
     @layout = 'layout.html.erb'.freeze
     @attempts = []
   end
@@ -21,6 +22,7 @@ class Game
     when '/new_game' then new_game
     when '/try' then try
     when '/about' then about
+    when '/hint' then hint
     else Rack::Response.new(render('not_found.html.erb'))
     end
   end
@@ -42,11 +44,13 @@ class Game
   end
 
   def new_game
-    sessions = YAML.load_file('games.yaml') || Hash.new
+#   @request.session['game'] = web_game
+
+    sessions = YAML.load_file('session_store.yaml') || Hash.new
     web_game = Breaker.new('Petro')
     sid = @request.session['session_id']
     sessions[sid] = web_game
-    File.open('games.yaml', 'w') { |f| f.write sessions.to_yaml }
+    File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
     Rack::Response.new(render('index.html.erb'))
   end
 
@@ -56,13 +60,37 @@ class Game
 
   def try
     Rack::Response.new do |response|
-      sessions = YAML.load_file('games.yaml')
+#     game = @request.session['game']
+#     @try = @request.params['attempt']
+#     result = game.play(@try)
+#     game.to_story(@try, result)
+#     @attempts = game.attempts
+
+      sessions = YAML.load_file('session_store.yaml')
       sid = @request.session['session_id']
       game = sessions[sid]
+
       @try = @request.params['attempt']
-      game.play(@try)
+      result = game.play(@try)
+      game.to_story(@try, result)
+      @attempts = game.attempts
+
       sessions[sid] = game
-      File.open('games.yaml', 'w') { |f| f.write sessions.to_yaml }
+      File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
+      response.write(render('index.html.erb'))
+    end
+  end
+
+  def hint
+    Rack::Response.new do |response|
+      sessions = YAML.load_file('session_store.yaml')
+      sid = @request.session['session_id']
+      game = sessions[sid]
+
+      @attempts = game.to_story('hint', game.hint)
+
+      sessions[sid] = game
+      File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
       response.write(render('index.html.erb'))
     end
   end
