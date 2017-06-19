@@ -22,4 +22,8 @@ class Breaker
   def hint
     @game.hint
   end
+
+  def left
+    @game.attempts
+  end
 end

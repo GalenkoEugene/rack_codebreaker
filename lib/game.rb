@@ -21,7 +21,6 @@ class Game
     when '/' then index
     when '/new_game' then new_game
     when '/try' then try
-    when '/about' then about
     when '/hint' then hint
     else Rack::Response.new(render('not_found.html.erb'))
     end
@@ -51,7 +50,7 @@ class Game
     sid = @request.session['session_id']
     sessions[sid] = web_game
     File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-    Rack::Response.new(render('index.html.erb'))
+    Rack::Response.new(render('play.html.erb'))
   end
 
   def about
@@ -70,6 +69,7 @@ class Game
       sid = @request.session['session_id']
       game = sessions[sid]
 
+      @left = game.left
       @try = @request.params['attempt']
       result = game.play(@try)
       game.to_story(@try, result)
@@ -77,7 +77,7 @@ class Game
 
       sessions[sid] = game
       File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-      response.write(render('index.html.erb'))
+      response.write(render('play.html.erb'))
     end
   end
 
@@ -91,7 +91,7 @@ class Game
 
       sessions[sid] = game
       File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-      response.write(render('index.html.erb'))
+      response.write(render('play.html.erb'))
     end
   end
 end

@@ -1,0 +1,34 @@
+
+      <div class="row">
+        <div class="container">
+          <div class="col-md-6 text-center">
+            <h3>Guess code with number from 1 to 6</h4>
+            <form class="navbar-form" role="form" action="/try">
+              <div class="input-group">
+                <input type="text" name="attempt" class="form-control" placeholder=" ****" maxlength="4" required>
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-info">Try <%= @left-1 if @left %>/10</button>
+                </span>
+              </div><!-- /input-group -->
+            </form>
+            <div class="btn-group btn-group-justified" role="group">
+              <form class="navbar-form btn-group" role="form" action="/new_game">
+                <button type="submit" class="btn btn-success">New game</button>
+              </form>
+              <form class="navbar-form btn-group" role="form" action="/hint">
+                <button type="submit" class="btn btn-danger">Hint</button>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3>Attempts:</h4>
+            <ul class="list-group">
+              <% @attempts.reverse.each do |attempt| %>
+                <li class="list-group-item">
+                  <span class="badge"><%= attempt[1] %></span><%= attempt[0] %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div><!--row-->
