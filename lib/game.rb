@@ -1,6 +1,7 @@
 require 'erb'
 require 'json'
 require 'yaml'
+require 'pry-byebug'
 require_relative '../controller/breaker'
 
 class Game
@@ -41,10 +42,11 @@ class Game
   end
 
   def new_game
-    #@request.session[:init] = true
-    web_game = Breaker.new
-    File.open('games.yaml', 'w') { |f| f.write ({ web_game.__id__ => web_game }.to_yaml) }
-    @request.session[:game_id] = web_game.__id__
+    sessions = YAML.load_file('games.yaml') || Hash.new
+    web_game = Breaker.new('Petro')
+    sid = @request.session['session_id']
+    sessions[sid] = web_game
+    File.open('games.yaml', 'w') { |f| f.write sessions.to_yaml }
     Rack::Response.new(render('index.html.erb'))
   end
 
@@ -54,14 +56,13 @@ class Game
 
   def try
     Rack::Response.new do |response|
-      game = YAML.load_file('games.yaml')[@request.session[:game_id]]
+      sessions = YAML.load_file('games.yaml')
+      sid = @request.session['session_id']
+      game = sessions[sid]
       @try = @request.params['attempt']
       game.play(@try)
-      File.open('games.yaml', 'w') { |f| f.write ({ @request.session[:game_id] => game }.to_yaml) }
-      #response.delete_cookie('name_of_cookie')
-      #response.set_cookie('story', ['1234', '+-'].to_json)
-      #p @request.session[:game_id]
-      @attempts = JSON.parse(@request.cookies['story'])
+      sessions[sid] = game
+      File.open('games.yaml', 'w') { |f| f.write sessions.to_yaml }
       response.write(render('index.html.erb'))
     end
   end

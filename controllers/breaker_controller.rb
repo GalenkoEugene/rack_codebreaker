@@ -1,7 +1,10 @@
 require 'codebreaker'
 
 class Breaker
-  def initialize
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
     @game = Codebreaker::Game.new
     @game.start
     @game
