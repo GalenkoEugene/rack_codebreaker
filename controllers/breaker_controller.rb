@@ -28,6 +28,13 @@ class Breaker
   def left
     @game.attempts
   end
+  def save
+    @game.save(name)
+  end
+
+  def score
+    @game.score
+  end
 
   private
 

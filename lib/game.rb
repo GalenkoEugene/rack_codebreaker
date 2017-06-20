@@ -5,7 +5,7 @@ require 'pry-byebug'
 require_relative '../controllers/breaker_controller'
 
 class Game
-  attr_accessor :game, :sid, :sessions
+  attr_accessor :game, :sid, :sessions, :score
   def self.call(env)
     new(env).response.finish
   end
@@ -28,6 +28,8 @@ class Game
     when '/hint' then hint
     when '/win' then Rack::Response.new(render('win.html.erb'))
     when '/lost' then Rack::Response.new(render('lost.html.erb'))
+    when '/score' then score
+    when '/save_score' then save_score
     else Rack::Response.new(render('not_found.html.erb'))
     end
   end
@@ -38,7 +40,7 @@ class Game
 
   def new_game
 #   @request.session['game'] = new_game
-    new_game = Breaker.new(@request['user_name'] || sessions[sid].name)
+    new_game = Breaker.new(@request['user_name'] || sessions[sid]&.name)
     store(new_game)
     Rack::Response.new(render('play.html.erb'))
   end
@@ -46,25 +48,35 @@ class Game
   def try
     Rack::Response.new do |response|
 #     game = @request.session['game']
-    @left = game.left
-    @try = @request.params['attempt']
-    result = game.play(@try)
-
-        game.to_story(@try, result)
-    @attempts = game.attempts
-    store(game)
-
-    response.redirect('/win') if result == '++++'
-    response.redirect('/lost') if game.left.zero?
-    response.write((render('play.html.erb')))
+      @left = game.left
+      @try = @request.params['attempt']
+      result = game.play(@try)
+      game.to_story(@try, result)
+      @attempts = game.attempts
+      store(game)
+      response.redirect('/win') if result == '++++'
+      response.redirect('/lost') if game.left.zero?
+      response.write((render('play.html.erb')))
     end
-    #Rack::Response.new(render('play.html.erb'))
   end
 
   def hint
     @attempts = game.to_story('hint:', game.hint)
     store(game)
     Rack::Response.new(render('play.html.erb'))
+  end
+
+  def save_score
+    game.save
+    @score = game.score
+    Rack::Response.new(render('score.html.erb'))
+  end
+
+  def score
+    Rack::Response.new do |response|
+      @score = game ? game.score : []
+      response.write(render('score.html.erb'))
+    end
   end
 
 private
