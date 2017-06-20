@@ -12,7 +12,7 @@ div img{
   margin: 15px auto 30px;
 }
 
- input.form-control{
+ input.try{
   text-align: center;
   letter-spacing: 1em;
  }
@@ -32,4 +32,7 @@ div.btn-group-justified{ /*new game, hint*/
 div ~ div.col-md-6{
   color: red;
 
+}
+img.game_over{
+  width: 50vh;
 }

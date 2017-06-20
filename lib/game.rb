@@ -5,6 +5,7 @@ require 'pry-byebug'
 require_relative '../controllers/breaker_controller'
 
 class Game
+  attr_accessor :game, :sid, :sessions
   def self.call(env)
     new(env).response.finish
   end
@@ -12,6 +13,9 @@ class Game
   def initialize(env)
     @request = Rack::Request.new(env)
     @request.session["init"] = true
+    @sid = @request.session['session_id']
+    @sessions = retrieve_sessions
+    @game = sessions[sid]
     @layout = 'layout.html.erb'.freeze
     @attempts = []
   end
@@ -22,8 +26,56 @@ class Game
     when '/new_game' then new_game
     when '/try' then try
     when '/hint' then hint
+    when '/win' then Rack::Response.new(render('win.html.erb'))
+    when '/lost' then Rack::Response.new(render('lost.html.erb'))
     else Rack::Response.new(render('not_found.html.erb'))
     end
+  end
+
+  def index
+    Rack::Response.new(render('index.html.erb'))
+  end
+
+  def new_game
+#   @request.session['game'] = new_game
+    new_game = Breaker.new(@request['user_name'] || sessions[sid].name)
+    store(new_game)
+    Rack::Response.new(render('play.html.erb'))
+  end
+
+  def try
+    Rack::Response.new do |response|
+#     game = @request.session['game']
+    @left = game.left
+    @try = @request.params['attempt']
+    result = game.play(@try)
+
+        game.to_story(@try, result)
+    @attempts = game.attempts
+    store(game)
+
+    response.redirect('/win') if result == '++++'
+    response.redirect('/lost') if game.left.zero?
+    response.write((render('play.html.erb')))
+    end
+    #Rack::Response.new(render('play.html.erb'))
+  end
+
+  def hint
+    @attempts = game.to_story('hint:', game.hint)
+    store(game)
+    Rack::Response.new(render('play.html.erb'))
+  end
+
+private
+
+  def retrieve_sessions
+    YAML.load_file('session_store.yaml') || Hash.new
+  end
+
+  def store(game_m)
+    sessions[sid] = game_m
+    File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
   end
 
   def render(template)
@@ -36,62 +88,5 @@ class Game
   def _render temp
     path = File.expand_path("../../views/#{temp}", __FILE__)
     ERB.new(File.read(path)).result( binding )
-  end
-
-  def index
-    Rack::Response.new(render('index.html.erb'))
-  end
-
-  def new_game
-#   @request.session['game'] = web_game
-
-    sessions = YAML.load_file('session_store.yaml') || Hash.new
-    web_game = Breaker.new('Petro')
-    sid = @request.session['session_id']
-    sessions[sid] = web_game
-    File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-    Rack::Response.new(render('play.html.erb'))
-  end
-
-  def about
-    Rack::Response.new(render('about.html.erb'))
-  end
-
-  def try
-    Rack::Response.new do |response|
-#     game = @request.session['game']
-#     @try = @request.params['attempt']
-#     result = game.play(@try)
-#     game.to_story(@try, result)
-#     @attempts = game.attempts
-
-      sessions = YAML.load_file('session_store.yaml')
-      sid = @request.session['session_id']
-      game = sessions[sid]
-
-      @left = game.left
-      @try = @request.params['attempt']
-      result = game.play(@try)
-      game.to_story(@try, result)
-      @attempts = game.attempts
-
-      sessions[sid] = game
-      File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-      response.write(render('play.html.erb'))
-    end
-  end
-
-  def hint
-    Rack::Response.new do |response|
-      sessions = YAML.load_file('session_store.yaml')
-      sid = @request.session['session_id']
-      game = sessions[sid]
-
-      @attempts = game.to_story('hint', game.hint)
-
-      sessions[sid] = game
-      File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
-      response.write(render('play.html.erb'))
-    end
   end
 end

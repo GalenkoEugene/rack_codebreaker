@@ -1,14 +1,23 @@
-<h3>
-  <p>It is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The code-maker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.</p>
+<div class="container text-center">
+  <h3>
+    <p>It is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The code-maker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.</p>
 
-  <p>The code-breaker then gets 10 number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers. The code-maker then marks the guess with up to four + and - signs.</p>
-</h3>
+    <p>The code-breaker then gets 10 number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers. The code-maker then marks the guess with up to four + and - signs.</p>
+  </h3>
 
-<h4>A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.</h4>
+  <h4>A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.</h4>
 
 
-<h4>A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.</h4>
+  <h4>A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.</h4>
 
-<form class="navbar-form btn-group" role="form" action="/new_game">
-  <button type="submit" class="btn btn-success">New game</button>
-</form>
+
+
+  <form class="navbar-form btn-group" role="form" action="/new_game">
+    <div class="input-group">
+      <input type="text" name="user_name" class="form-control" placeholder="Enter name" maxlength="20" required>
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-success">New game</button>
+      </span>
+    </div>
+  </form>
+</div>

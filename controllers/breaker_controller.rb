@@ -1,11 +1,12 @@
 require 'codebreaker'
 
 class Breaker
-  attr_reader :name, :attempts
+  attr_reader :name, :attempts, :left_hint
 
   def initialize(name)
     @name = name
     @attempts = []
+    @left_hint = 3
     @game = Codebreaker::Game.new
     @game.start
     @game
@@ -20,10 +21,17 @@ class Breaker
   end
 
   def hint
-    @game.hint
+    @left_hint-=1
+    available? ? @game.hint : 'ended'
   end
 
   def left
     @game.attempts
+  end
+
+  private
+
+  def available?
+    true if left_hint >= 0
   end
 end
