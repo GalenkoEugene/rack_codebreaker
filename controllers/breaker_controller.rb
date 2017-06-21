@@ -22,7 +22,7 @@ class Breaker
 
   def hint
     @left_hint-=1
-    available? ? @game.hint : 'ended'
+    available? ? @game.hint : 'end'
   end
 
   def left

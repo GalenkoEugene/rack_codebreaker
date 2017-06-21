@@ -29,10 +29,12 @@ div img{
 div.btn-group-justified{ /*new game, hint*/
   margin-top: 30px;
 }
+
 div ~ div.col-md-6{
   color: red;
 
 }
+
 img.game_over{
   width: 50vh;
 }

@@ -1,11 +1,12 @@
 
       <div class="row">
         <div class="container">
-          <div class="col-md-6 text-center">
+          <div class="col-md-1"> </div>
+          <div class="col-md-5 text-center">
             <h3>Guess code with number from 1 to 6</h4>
-            <form class="navbar-form" role="form" action="/try">
+            <form class="navbar-form try" method="post" role="form" action="/try">
               <div class="input-group">
-                <input type="text" name="attempt" class="form-control try" placeholder=" ****" maxlength="4" required>
+                <input type="text" name="attempt" class="form-control try" placeholder=" ****" maxlength="4" required autofocus>
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-info">Try <%= @left-1 if @left %>/10</button>
                 </span>
@@ -20,7 +21,7 @@
               </form>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5 text-left">
             <h3>Attempts:</h4>
             <ul class="list-group">
               <% @attempts.reverse.each do |attempt| %>
