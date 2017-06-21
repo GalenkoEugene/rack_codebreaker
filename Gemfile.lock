@@ -1,7 +1,5 @@
-GIT
-  remote: git@github.com:GalenkoNeon/CodeBreaker.git
-  revision: 6a79c40aead3226c20a7d855e0fe09c258e9d263
-  tag: v0.1.2
+PATH
+  remote: lib
   specs:
     codebreaker (0.1.2)
 
