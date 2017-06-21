@@ -1,1 +1,3 @@
+*.yaml
+
 .rake_tasks~
