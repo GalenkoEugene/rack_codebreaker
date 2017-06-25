@@ -15,3 +15,7 @@
   name: Трубодур
   score: 7
   time: '2017-06-21 13:29:34'
+- !ruby/struct:Codebreaker::Game::NST
+  name: Eugene
+  score: 2
+  time: '2017-06-25 18:09:15'

@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'codebreaker'
 
+# access to core of the game
 class Breaker
   attr_reader :name, :attempts, :left_hint
 
@@ -16,18 +19,19 @@ class Breaker
     @game.compare_with(input)
   end
 
-  def to_story (amount, result)
+  def to_story(amount, result)
     @attempts.push([amount, result])
   end
 
   def hint
-    @left_hint-=1
+    @left_hint -= 1
     available? ? @game.hint : 'end'
   end
 
-  def left
+  def approach
     @game.attempts
   end
+
   def save
     @game.save(name)
   end

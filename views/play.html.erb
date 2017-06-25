@@ -8,7 +8,7 @@
               <div class="input-group">
                 <input type="text" name="attempt" class="form-control try" placeholder=" ****" maxlength="4" required autofocus>
                 <span class="input-group-btn">
-                  <button type="submit" class="btn btn-info">Try <%= @left-1 if @left %>/10</button>
+                  <button type="submit" class="btn btn-info">Try <%= @left || 10 %>/10</button>
                 </span>
               </div><!-- /input-group -->
             </form>

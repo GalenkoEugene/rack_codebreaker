@@ -1,14 +1,13 @@
-require './lib/game'
+# frozen_string_literal: true
+
+require './lib/racker'
 
 app = Rack::Builder.new do
-  use Rack::Static, :urls => ["/images", "/styles", "/js"], :root => "public"
-  use Rack::Session::Cookie, :key => 'rack.session',
-                             :expire_after => 216000,
-                             :secret => 'change_me' # ENV['SECRET_TOKEN']
-  run Game
+  use Rack::Static, urls: ['/images', '/styles', '/js'], root: 'public'
+  use Rack::Session::Cookie, key: 'rack.session',
+                             expire_after: 216_000,
+                             secret: '*&(^B234'
+  run Racker
 end
 
 run app
-#use Rack::Auth::Basic, "Restricted Area" do |username, password|
-#  [username, password] == ['code', 'breaker']
-#end
