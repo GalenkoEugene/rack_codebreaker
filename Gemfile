@@ -3,11 +3,11 @@
 source 'https://rubygems.org'
 ruby '2.4.1'
 
-gem 'codebreaker', '0.1.2', git: 'git://github.com/GalenkoNeon/CodeBreaker.git', branch: 'master'
+gem 'codebreaker', git: 'git://github.com/GalenkoNeon/CodeBreaker.git', branch: 'master'
 gem 'rack'
 gem 'rake'
-gem 'rubocop', '~>0.48'
 
 group :development do
   gem 'pry-byebug'
+  gem 'rubocop', '~>0.48'
 end

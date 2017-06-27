@@ -34,6 +34,8 @@ class Racker
     end
   end
 
+  private
+
   def represent(template)
     Rack::Response.new(render(template))
   end
@@ -50,8 +52,8 @@ class Racker
     game.to_story(attempt, result) && store_game
     prepare_data_for_view
     Rack::Response.new do |response|
-      response.redirect('/win') if result == '++++'
-      response.redirect('/lost') if @left.zero? && result != '++++'
+      return response.redirect('/win') if result == '++++'
+      return response.redirect('/lost') if @left.zero?
       response.write(render('play'))
     end
   end
@@ -68,8 +70,6 @@ class Racker
     prepare_data_for_view
     represent('score')
   end
-
-  private
 
   def prepare_data_for_view
     @score = game ? game.score : []
