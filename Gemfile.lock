@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/GalenkoNeon/CodeBreaker.git
-  revision: 9dccbc5af3bc6578bcff83652ba9fbf98db1b0b0
+  revision: d1965f89a7b00fad18a98f3b4c04fce71f77fa8d
   branch: master
   specs:
-    codebreaker (0.1.2)
+    codebreaker (0.1.3)
 
 GEM
   remote: https://rubygems.org/
@@ -42,7 +42,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  codebreaker (= 0.1.2)!
+  codebreaker!
   pry-byebug
   rack
   rake
