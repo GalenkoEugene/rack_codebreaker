@@ -7,6 +7,7 @@ require_relative '../model/breaker'
 # Game action
 class Action
   attr_accessor :game, :sid, :sessions, :request
+  DUMP = 'session_store.yaml'
 
   def initialize(req)
     @request = req
@@ -55,7 +56,7 @@ class Action
   end
 
   def method_missing(m_name)
-    (%i[index win lost not_found].include? m_name) ? represent(m_name) : super
+    %i[index win lost not_found].include?(m_name) ? represent(m_name) : super
   end
 
   def prepare_data_for_view
@@ -65,12 +66,12 @@ class Action
   end
 
   def retrieve_sessions
-    YAML.load_file('session_store.yaml') || Hash.new
+    File.exist?(DUMP) ? YAML.load_file(DUMP) : {}
   end
 
   def store_game
     sessions[sid] = game
-    File.open('session_store.yaml', 'w') { |f| f.write sessions.to_yaml }
+    File.open(DUMP, 'w') { |f| f.write sessions.to_yaml }
   end
 
   def render(template)
