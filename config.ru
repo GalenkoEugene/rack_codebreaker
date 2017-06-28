@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/racker'
+require_relative './lib/racker'
 
 app = Rack::Builder.new do
   use Rack::Static, urls: ['/images', '/styles', '/js'], root: 'public'
