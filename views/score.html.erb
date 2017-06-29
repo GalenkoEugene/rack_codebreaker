@@ -1,0 +1,24 @@
+
+  <table class="table table-bordered text-left">
+    <thead>
+      <tr class="info">
+        <th>Name</th>
+        <th>Score</th>
+        <th>Date Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @score.each do |player| %>
+        <tr class="success">
+          <td><%= player.name %></td>
+          <td><%= player.score %></td>
+          <td><%= player.time %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <form class="navbar-form btn-group" role="form" action="/new_game">
+    <button type="submit" class="btn btn-success">Play again?</button>
+  </form>
+
