@@ -51,8 +51,8 @@ class Action
 
   private
 
-  def represent(template)
-    Rack::Response.new(render(template.to_s))
+  def represent(templ)
+    Rack::Response.new(render(templ.to_s), templ == :not_found ? 404 : 200)
   end
 
   def method_missing(m_name)

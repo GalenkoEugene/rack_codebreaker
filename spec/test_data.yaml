@@ -1,0 +1,15 @@
+---
+17deaf4f3952f6eefa84645cca4352e47835c76605f55a5e4cf311917d39b12b: !ruby/object:Breaker
+  name: gamletneon
+  attempts: []
+  left_hint: 3
+  game: !ruby/object:Codebreaker::Game
+    secret_code:
+    - '6'
+    - '2'
+    - '4'
+    - '5'
+    result: ''
+    aid: []
+    attempts: 10
+session: 'rack.session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVEkiRTE3ZGVhZjRmMzk1MmY2ZWVmYTg0%0ANjQ1Y2NhNDM1MmU0NzgzNWM3NjYwNWY1NWE1ZTRjZjMxMTkxN2QzOWIxMmIG%0AOwBGSSIJaW5pdAY7AFRU%0A--1572148af775723f0ef41e8f9db4cf9e0dd4f208'

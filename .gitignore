@@ -1,3 +1,4 @@
-*.yaml
+session_store.yaml
+data.yaml
 
 .rake_tasks~
