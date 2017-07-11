@@ -61,8 +61,8 @@ class Action
 
   def prepare_data_for_view
     @score = game ? game.score : []
-    @attempts = game.attempts
-    @left = game.approach
+    @attempts = game&.attempts
+    @left = game&.approach
   end
 
   def retrieve_sessions
